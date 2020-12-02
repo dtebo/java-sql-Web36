@@ -158,7 +158,7 @@ GROUP BY c.company_name
 ORDER BY c.company_name
 ```
 
-* [ ] ***list customers by contact name and the number of orders per contact name. Sort the list by the number of orders in descending order. _Jose Pavarotti_ should be at the top with 31 orders followed by _Roland Mendal_ with 30 orders. Last should be _Francisco Chang_ with 1 order***
+* [x] ***list customers by contact name and the number of orders per contact name. Sort the list by the number of orders in descending order. _Jose Pavarotti_ should be at the top with 31 orders followed by _Roland Mendal_ with 30 orders. Last should be _Francisco Chang_ with 1 order***
 
   <details><summary>hint</summary>
 
@@ -166,7 +166,15 @@ ORDER BY c.company_name
   </details>
 
 ```SQL
-
+SELECT c.contact_name, COUNT(o.order_id) as TotalOrders
+FROM customers c
+LEFT JOIN orders o
+ON c.customer_id = o.customer_id
+WHERE c.contact_name LIKE '%Jose P%'
+	OR c.contact_name LIKE '%Roland%'
+	OR c.contact_name LIKE '%Francisco%'
+GROUP BY c.contact_name
+ORDER BY c.contact_name DESC
 ```
 
 * [ ] ***list orders grouped by customer's city showing the number of orders per city. Returns 69 Records with _Aachen_ showing 6 orders and _Albuquerque_ showing 18 orders***
@@ -177,14 +185,20 @@ ORDER BY c.company_name
   </details>
 
 ```SQL
-
+SELECT c.city, COUNT(o.order_id) as total_orders_per_city
+FROM customers c
+RIGHT JOIN orders o
+ON o.customer_id = c.customer_id
+WHERE c.city LIKE '%Aachen%'
+	OR c.city LIKE '%Albuquerque%'
+GROUP BY c.city
 ```
 
 ## Data Normalization
 
 Note: This step does not use PostgreSQL!
 
-* [ ] ***Take the following data and normalize it into a 3NF database***
+* [x] ***Take the following data and normalize it into a 3NF database***
 
 | Person Name | Pet Name | Pet Type | Pet Name 2 | Pet Type 2 | Pet Name 3 | Pet Type 3 | Fenced Yard | City Dweller |
 |-------------|----------|----------|------------|------------|------------|------------|-------------|--------------|
@@ -197,53 +211,53 @@ Below are some empty tables to be used to normalize the database
 * Not all of the cells will contain data in the final solution
 * Feel free to edit these tables as necessary
 
-Table Name:
+Table Name: Person
 
-|            |            |            |            |            |            |            |            |            |
+| person_id  | person_name| fenced_yard|city_dweller|            |            |            |            |            |
 |------------|------------|------------|------------|------------|------------|------------|------------|------------|
-|            |            |            |            |            |            |            |            |            |
-|            |            |            |            |            |            |            |            |            |
-|            |            |            |            |            |            |            |            |            |
+| 1          | Jane       | No         | Yes        |            |            |            |            |            |
+| 2          | Bob        | No         | No         |            |            |            |            |            |
+| 3          | Sam        | Yes        | No         |            |            |            |            |            |
 |            |            |            |            |            |            |            |            |            |
 |            |            |            |            |            |            |            |            |            |
 |            |            |            |            |            |            |            |            |            |
 |            |            |            |            |            |            |            |            |            |
 
-Table Name:
+Table Name: Pets
 
-|            |            |            |            |            |            |            |            |            |
+| pet_id     | pet_name   | pet_type_id|            |            |            |            |            |            |
 |------------|------------|------------|------------|------------|------------|------------|------------|------------|
-|            |            |            |            |            |            |            |            |            |
-|            |            |            |            |            |            |            |            |            |
-|            |            |            |            |            |            |            |            |            |
-|            |            |            |            |            |            |            |            |            |
-|            |            |            |            |            |            |            |            |            |
-|            |            |            |            |            |            |            |            |            |
-|            |            |            |            |            |            |            |            |            |
+| 1          | Ellie      |  3         |            |            |            |            |            |            |
+| 2          | Joe        |  1         |            |            |            |            |            |            |
+| 3          | Ginger     |  3         |            |            |            |            |            |            |
+| 4          | Tiger      |  2         |            |            |            |            |            |            |
+| 5          | Miss Kitty |  2         |            |            |            |            |            |            |
+| 6          | Toby       |  4         |            |            |            |            |            |            |
+| 7          | Bubble     |  5         |            |            |            |            |            |            |
 
-Table Name:
+Table Name: PetType
 
-|            |            |            |            |            |            |            |            |            |
+| pet_type_id| type_name  |            |            |            |            |            |            |            |
 |------------|------------|------------|------------|------------|------------|------------|------------|------------|
-|            |            |            |            |            |            |            |            |            |
-|            |            |            |            |            |            |            |            |            |
-|            |            |            |            |            |            |            |            |            |
-|            |            |            |            |            |            |            |            |            |
-|            |            |            |            |            |            |            |            |            |
+| 1          | Horse      |            |            |            |            |            |            |            |
+| 2          | Cat        |            |            |            |            |            |            |            |
+| 3          | Dog        |            |            |            |            |            |            |            |
+| 4          | Turtle     |            |            |            |            |            |            |            |
+| 5          | Fish       |            |            |            |            |            |            |            |
 |            |            |            |            |            |            |            |            |            |
 |            |            |            |            |            |            |            |            |            |
 
-Table Name:
+Table Name: PersonPets
 
-|            |            |            |            |            |            |            |            |            |
+| person_id  | pet_id     |            |            |            |            |            |            |            |
 |------------|------------|------------|------------|------------|------------|------------|------------|------------|
-|            |            |            |            |            |            |            |            |            |
-|            |            |            |            |            |            |            |            |            |
-|            |            |            |            |            |            |            |            |            |
-|            |            |            |            |            |            |            |            |            |
-|            |            |            |            |            |            |            |            |            |
-|            |            |            |            |            |            |            |            |            |
-|            |            |            |            |            |            |            |            |            |
+|  1         | 1          |            |            |            |            |            |            |            |
+|  1         | 4          |            |            |            |            |            |            |            |
+|  1         | 6          |            |            |            |            |            |            |            |
+|  2         | 2          |            |            |            |            |            |            |            |
+|  3         | 3          |            |            |            |            |            |            |            |
+|  3         | 5          |            |            |            |            |            |            |            |
+|  3         | 7          |            |            |            |            |            |            |            |
 
 ---
 

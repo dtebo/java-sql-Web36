@@ -42,7 +42,7 @@ FROM customers c
 WHERE city LIKE '%London%'
 ```
 
-* [ ] ***find all customers with postal code 1010. Returns 3 customers***
+* [x] ***find all customers with postal code 1010. Returns 3 customers***
 
   <details><summary>hint</summary>
 
@@ -50,7 +50,9 @@ WHERE city LIKE '%London%'
   </details>
 
 ```SQL
-
+SELECT *
+FROM customers c
+WHERE postal_code = '1010'
 ```
 
 * [ ] ***find the phone number for the supplier with the id 11. Should be (010) 9984510***

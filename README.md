@@ -95,7 +95,7 @@ FROM suppliers s
 WHERE LENGTH(company_name) > 20
 ```
 
-* [ ] ***find all customers that include the word 'MARKET' in the contact title. Should return 19 records***
+* [x] ***find all customers that include the word 'MARKET' in the contact title. Should return 19 records***
 
   <details><summary>hint</summary>
 
@@ -105,10 +105,12 @@ WHERE LENGTH(company_name) > 20
   </details>
 
 ```SQL
-
+SELECT contact_title
+FROM suppliers s
+WHERE UPPER(s.contact_title) LIKE '%MARKET%'
 ```
 
-* [ ] ***add a customer record for***
+* [x] ***add a customer record for***
 * customer id is 'SHIRE'
 * company name is 'The Shire'
 * contact name is 'Bilbo Baggins'
@@ -122,10 +124,11 @@ WHERE LENGTH(company_name) > 20
   </details>
 
 ```SQL
-
+INSERT INTO customers(customer_id, company_name, contact_name, address, city, postal_code, country)
+VALUES('SHIRE','The Shire','Bilbo Baggins','1 Hobbit-Hole','Bag End','111','Middle Earth')
 ```
 
-* [ ] ***update _Bilbo Baggins_ record so that the postal code changes to _"11122"_***
+* [x] ***update _Bilbo Baggins_ record so that the postal code changes to _"11122"_***
 
   <details><summary>hint</summary>
 
@@ -133,10 +136,11 @@ WHERE LENGTH(company_name) > 20
   </details>
 
 ```SQL
-
+UPDATE customers
+SET postal_code = '11122'
 ```
 
-* [ ] ***list orders grouped and ordered by customer company name showing the number of orders per customer company name. _Rattlesnake Canyon Grocery_ should have 18 orders***
+* [x] ***list orders grouped and ordered by customer company name showing the number of orders per customer company name. _Rattlesnake Canyon Grocery_ should have 18 orders***
 
   <details><summary>hint</summary>
 
@@ -145,7 +149,13 @@ WHERE LENGTH(company_name) > 20
   </details>
 
 ```SQL
-
+SELECT COUNT(o.order_id), c.company_name
+FROM orders o
+LEFT JOIN customers c
+ON c.customer_id = o.customer_id
+WHERE c.company_name LIKE '%Rattlesnake%'
+GROUP BY c.company_name
+ORDER BY c.company_name
 ```
 
 * [ ] ***list customers by contact name and the number of orders per contact name. Sort the list by the number of orders in descending order. _Jose Pavarotti_ should be at the top with 31 orders followed by _Roland Mendal_ with 30 orders. Last should be _Francisco Chang_ with 1 order***
